@@ -15,11 +15,3 @@ g++ -std=c++17 -Wall -Wextra -O2 -o lob_demo main.cpp order_book.cpp
 g++ -std=c++17 -Wall -Wextra -O2 -o benchmark benchmark.cpp order_book.cpp
 ./benchmark
 ```
-
-## Benchmark results (1,000,000 random orders, single core)
-- Throughput: ~3.97M orders/sec
-- Latency p50: 166 ns
-- Latency p99: 605 ns
-- Latency p99.9: 2053 ns
-
-(Your numbers may vary depending on hardware — rerun before quoting.)
