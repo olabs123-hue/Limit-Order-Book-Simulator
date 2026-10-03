@@ -1,17 +1,15 @@
-# Limit Order Book Simulator
 
-A price-time priority limit order book matching engine in C++.
+Independent runs on a cloud VM (single 2.1 GHz Xeon vCPU, `g++ -O2`, 3 runs) gave
+3.3-3.8M orders/sec, p50 162-183 ns and p99 650-763 ns.
 
-## Design
-- `buy_levels_`: `std::map<double, std::list<Order>, std::greater<double>>` — sorted descending (best bid first). O(log N) insertion of a new price level.
-- `sell_levels_`: `std::map<double, std::list<Order>>` — sorted ascending (best ask first).
-- `order_index_`: `std::unordered_map<order_id, iterator>` — enables O(1) average-case order cancellation by holding a direct iterator into the resting order's position in its price level's list.
+## Tests
 
-## Build & run
+```bash
+cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+cmake --build build --parallel
+ctest --test-dir build --output-on-failure
 ```
-g++ -std=c++17 -Wall -Wextra -O2 -o lob_demo main.cpp order_book.cpp
-./lob_demo
 
-g++ -std=c++17 -Wall -Wextra -O2 -o benchmark benchmark.cpp order_book.cpp
-./benchmark
-```
+22 GoogleTest tests cover crossing and non-crossing orders, trade price at the resting
+order's price, partial fills on both sides, price priority, FIFO time priority within a level,
+cancellation, pruning of empty price levels, and randomized invariants. CI runs them on every push.
