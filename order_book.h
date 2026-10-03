@@ -4,6 +4,7 @@
 #include <list>
 #include <unordered_map>
 #include <vector>
+#include <cstddef>
 #include <functional>
 #include <iostream>
 
@@ -25,6 +26,12 @@ public:
     bool cancelOrder(uint64_t order_id);
 
     void printBook() const;
+
+    // Introspection helpers (used by the tests to check that empty price
+    // levels are pruned and that the order index stays consistent).
+    std::size_t bidLevelCount() const { return buy_levels_.size(); }
+    std::size_t askLevelCount() const { return sell_levels_.size(); }
+    std::size_t restingOrderCount() const { return order_index_.size(); }
 
 private:
     // Buy side: highest price first  -> descending order
